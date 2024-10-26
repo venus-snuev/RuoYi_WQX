@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.controller.base.mapper.BaseCommodityMapper">
+    
+    <resultMap type="BaseCommodity" id="BaseCommodityResult">
+        <result property="commodityId"    column="commodity_id"    />
+        <result property="commodityNoStr"    column="commodity_no_str"    />
+        <result property="commodityNameStr"    column="commodity_name_str"    />
+        <result property="commodityCostVal"    column="commodity_cost_val"    />
+        <result property="commodityMinSpecVal"    column="commodity_min_spec_val"    />
+        <result property="primaryClassVal"    column="primary_class_val"    />
+        <result property="secondaryClassVal"    column="secondary_class_val"    />
+    </resultMap>
+
+    <sql id="selectBaseCommodityVo">
+        select commodity_id, commodity_no_str, commodity_name_str, commodity_cost_val, commodity_min_spec_val, primary_class_val, secondary_class_val from base_commodity
+    </sql>
+
+    <select id="selectBaseCommodityList" parameterType="BaseCommodity" resultMap="BaseCommodityResult">
+        <include refid="selectBaseCommodityVo"/>
+        <where>  
+            <if test="commodityNoStr != null  and commodityNoStr != ''"> and commodity_no_str = #{commodityNoStr}</if>
+            <if test="commodityNameStr != null  and commodityNameStr != ''"> and commodity_name_str = #{commodityNameStr}</if>
+            <if test="commodityCostVal != null "> and commodity_cost_val = #{commodityCostVal}</if>
+            <if test="commodityMinSpecVal != null "> and commodity_min_spec_val = #{commodityMinSpecVal}</if>
+            <if test="primaryClassVal != null  and primaryClassVal != ''"> and primary_class_val = #{primaryClassVal}</if>
+            <if test="secondaryClassVal != null  and secondaryClassVal != ''"> and secondary_class_val = #{secondaryClassVal}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseCommodityByCommodityId" parameterType="String" resultMap="BaseCommodityResult">
+        <include refid="selectBaseCommodityVo"/>
+        where commodity_id = #{commodityId}
+    </select>
+
+    <insert id="insertBaseCommodity" parameterType="BaseCommodity">
+        insert into base_commodity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commodityId != null">commodity_id,</if>
+            <if test="commodityNoStr != null and commodityNoStr != ''">commodity_no_str,</if>
+            <if test="commodityNameStr != null and commodityNameStr != ''">commodity_name_str,</if>
+            <if test="commodityCostVal != null">commodity_cost_val,</if>
+            <if test="commodityMinSpecVal != null">commodity_min_spec_val,</if>
+            <if test="primaryClassVal != null">primary_class_val,</if>
+            <if test="secondaryClassVal != null">secondary_class_val,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commodityId != null">#{commodityId},</if>
+            <if test="commodityNoStr != null and commodityNoStr != ''">#{commodityNoStr},</if>
+            <if test="commodityNameStr != null and commodityNameStr != ''">#{commodityNameStr},</if>
+            <if test="commodityCostVal != null">#{commodityCostVal},</if>
+            <if test="commodityMinSpecVal != null">#{commodityMinSpecVal},</if>
+            <if test="primaryClassVal != null">#{primaryClassVal},</if>
+            <if test="secondaryClassVal != null">#{secondaryClassVal},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseCommodity" parameterType="BaseCommodity">
+        update base_commodity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="commodityNoStr != null and commodityNoStr != ''">commodity_no_str = #{commodityNoStr},</if>
+            <if test="commodityNameStr != null and commodityNameStr != ''">commodity_name_str = #{commodityNameStr},</if>
+            <if test="commodityCostVal != null">commodity_cost_val = #{commodityCostVal},</if>
+            <if test="commodityMinSpecVal != null">commodity_min_spec_val = #{commodityMinSpecVal},</if>
+            <if test="primaryClassVal != null">primary_class_val = #{primaryClassVal},</if>
+            <if test="secondaryClassVal != null">secondary_class_val = #{secondaryClassVal},</if>
+        </trim>
+        where commodity_id = #{commodityId}
+    </update>
+
+    <delete id="deleteBaseCommodityByCommodityId" parameterType="String">
+        delete from base_commodity where commodity_id = #{commodityId}
+    </delete>
+
+    <delete id="deleteBaseCommodityByCommodityIds" parameterType="String">
+        delete from base_commodity where commodity_id in 
+        <foreach item="commodityId" collection="array" open="(" separator="," close=")">
+            #{commodityId}
+        </foreach>
+    </delete>
+
+</mapper>
